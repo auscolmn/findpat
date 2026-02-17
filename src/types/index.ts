@@ -2,6 +2,29 @@ export type VerificationTier = 'listed' | 'verified' | 'certified';
 
 // Re-export clinic types
 export * from './clinic';
+
+// Selectively re-export review types (avoiding naming conflicts with clinic.ts)
+export type {
+  OutcomeRating,
+  TreatmentType as PATTreatmentType,
+  ConditionTreated,
+  ReviewStatus,
+  Review,
+  ReviewToken,
+  PractitionerReviewStats,
+  ReviewInput,
+} from './reviews';
+
+export {
+  OUTCOME_RATING_LABELS,
+  OUTCOME_RATING_EMOJI,
+  OUTCOME_RATING_COLORS,
+  POSITIVE_OUTCOMES,
+  TREATMENT_TYPE_LABELS as PAT_TREATMENT_TYPE_LABELS,
+  CONDITION_LABELS,
+  calculatePositiveOutcomeRate,
+  formatTreatmentDate,
+} from './reviews';
 export type Availability = 'accepting' | 'waitlist' | 'not_accepting';
 export type PractitionerRole = 'psychiatrist' | 'psychologist' | 'therapist' | 'nurse' | 'integration_coach';
 export type Modality = 'mdma' | 'psilocybin' | 'ketamine' | 'lsd' | 'cannabis' | 'ayahuasca' | 'ibogaine' | '5-meo-dmt';

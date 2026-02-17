@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { samplePractitioners, searchPractitioners } from '@/data/practitioners';
+import { getStatsForPractitioner } from '@/data/reviews';
 import {
   Modality,
   Specialty,
@@ -467,13 +468,18 @@ function SearchContent() {
               {/* Results Grid */}
               {filteredPractitioners.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-5">
-                  {filteredPractitioners.map((practitioner) => (
-                    <PractitionerCard
-                      key={practitioner.id}
-                      practitioner={practitioner}
-                      showCollaborationBadge={userType === 'practitioner'}
-                    />
-                  ))}
+                  {filteredPractitioners.map((practitioner) => {
+                    const stats = getStatsForPractitioner(practitioner.slug);
+                    return (
+                      <PractitionerCard
+                        key={practitioner.id}
+                        practitioner={practitioner}
+                        showCollaborationBadge={userType === 'practitioner'}
+                        rating={stats.average_rating}
+                        reviewCount={stats.approved_reviews}
+                      />
+                    );
+                  })}
                 </div>
               ) : (
                 <Card className="shadow-neumorphic">

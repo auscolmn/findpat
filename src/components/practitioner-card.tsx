@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { VerificationBadge, getCardBorderClass } from '@/components/verification-badge';
+import { StarRatingDisplay } from '@/components/reviews';
 import { Practitioner, MODALITY_LABELS, SPECIALTY_LABELS, ROLE_LABELS, SERVICE_TYPE_CONFIG, COVERAGE_CONFIG } from '@/types';
 import { MapPin, CheckCircle, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -11,9 +12,11 @@ import { cn } from '@/lib/utils';
 interface PractitionerCardProps {
   practitioner: Practitioner;
   showCollaborationBadge?: boolean;
+  rating?: number | null;
+  reviewCount?: number;
 }
 
-export function PractitionerCard({ practitioner, showCollaborationBadge = false }: PractitionerCardProps) {
+export function PractitionerCard({ practitioner, showCollaborationBadge = false, rating, reviewCount }: PractitionerCardProps) {
   const availabilityConfig = {
     accepting: {
       label: 'Accepting new clients',
@@ -74,6 +77,13 @@ export function PractitionerCard({ practitioner, showCollaborationBadge = false 
             <p className="text-sm text-cyan-700 mb-1">
               {ROLE_LABELS[practitioner.role]}
             </p>
+
+            {/* Rating display */}
+            {rating && reviewCount && reviewCount > 0 && (
+              <div className="mb-1">
+                <StarRatingDisplay rating={rating} reviewCount={reviewCount} size="sm" />
+              </div>
+            )}
 
             <div className="flex items-center gap-1 text-sm text-cyan-600 mb-2">
               <MapPin className="h-3.5 w-3.5" />

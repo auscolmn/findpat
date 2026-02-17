@@ -25,7 +25,9 @@ import {
   Calendar,
   Sparkles,
   X,
+  MessageSquare,
 } from 'lucide-react';
+import { ReviewsManagement } from '@/components/dashboard/reviews-management';
 
 function DashboardContent() {
   const router = useRouter();
@@ -370,6 +372,14 @@ function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Reviews Management */}
+            {profile.slug && (
+              <ReviewsManagement 
+                practitionerId={profile.id}
+                practitionerSlug={profile.slug}
+              />
+            )}
           </div>
 
           {/* Sidebar */}

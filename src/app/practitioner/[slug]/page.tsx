@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { samplePractitioners } from '@/data/practitioners';
+import { getReviewsForPractitioner, getStatsForPractitioner } from '@/data/reviews';
+import { ReviewsSectionStatic, StarRatingDisplay } from '@/components/reviews';
 import {
   MODALITY_LABELS,
   SPECIALTY_LABELS,
@@ -39,6 +41,10 @@ export default async function PractitionerProfilePage({ params }: Props) {
   if (!practitioner) {
     notFound();
   }
+
+  // Get reviews and stats for this practitioner
+  const reviews = getReviewsForPractitioner(slug);
+  const reviewStats = getStatsForPractitioner(slug);
 
   const availabilityConfig = {
     accepting: {
@@ -126,6 +132,17 @@ export default async function PractitionerProfilePage({ params }: Props) {
                           size="md"
                         />
                       </div>
+
+                      {/* Rating display */}
+                      {reviewStats.average_rating && (
+                        <div className="mb-3">
+                          <StarRatingDisplay 
+                            rating={reviewStats.average_rating} 
+                            reviewCount={reviewStats.approved_reviews}
+                            size="sm"
+                          />
+                        </div>
+                      )}
 
                       <p className="text-cyan-700 mb-2">
                         {ROLE_LABELS[practitioner.role]}
@@ -273,6 +290,14 @@ export default async function PractitionerProfilePage({ params }: Props) {
                   </CardContent>
                 </Card>
               )}
+
+              {/* Client Outcomes & Reviews Section */}
+              <ReviewsSectionStatic
+                practitionerId={practitioner.id}
+                practitionerSlug={practitioner.slug}
+                stats={reviewStats}
+                reviews={reviews}
+              />
             </div>
 
             {/* Sidebar */}

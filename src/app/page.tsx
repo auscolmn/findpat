@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { PractitionerCard } from '@/components/practitioner-card';
@@ -15,6 +14,7 @@ import {
   ArrowRight,
   Heart,
   Briefcase,
+  Sparkles,
 } from 'lucide-react';
 import { WaitlistForm } from '@/components/waitlist-form';
 
@@ -29,6 +29,24 @@ export default function HomePage() {
       <Header />
       
       <main className="flex-1">
+        {/* Practitioner Banner */}
+        <section className="bg-gradient-to-r from-green-600 to-green-500 py-3">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
+              <div className="flex items-center gap-2 text-white">
+                <Sparkles className="h-5 w-5" />
+                <span className="font-medium">Are you a PAT practitioner?</span>
+              </div>
+              <Link href="/register">
+                <Button size="sm" variant="secondary" className="bg-white text-green-700 hover:bg-green-50 shadow-lg">
+                  List Your Profile — Free
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="bg-gradient-cyan py-16 md:py-24">
           <div className="container mx-auto px-4">
@@ -239,6 +257,10 @@ export default function HomePage() {
         <section className="bg-cyan-50 py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                <Sparkles className="h-4 w-4" />
+                Join 100+ verified practitioners
+              </div>
               <h2 className="text-3xl font-bold text-cyan-900 mb-4">
                 Are You a PAT Practitioner?
               </h2>
@@ -247,14 +269,15 @@ export default function HomePage() {
                 Get found by clients and connect with collaborators.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/join">
-                  <Button className="bg-green-600 hover:bg-green-700 text-lg px-8 py-6">
-                    Get Listed — Free
+                <Link href="/register">
+                  <Button className="bg-green-600 hover:bg-green-700 text-lg px-8 py-6 shadow-lg shadow-green-600/20">
+                    List Your Profile — Free
+                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <Link href="/pricing">
+                <Link href="/join">
                   <Button variant="outline" className="border-cyan-600 text-cyan-700 text-lg px-8 py-6">
-                    View Pricing
+                    View Pricing Plans
                   </Button>
                 </Link>
               </div>

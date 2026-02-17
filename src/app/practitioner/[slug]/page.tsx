@@ -12,6 +12,8 @@ import {
   MODALITY_LABELS,
   SPECIALTY_LABELS,
   ROLE_LABELS,
+  SERVICE_TYPE_CONFIG,
+  COVERAGE_CONFIG,
 } from '@/types';
 import {
   ArrowLeft,
@@ -275,6 +277,54 @@ export default async function PractitionerProfilePage({ params }: Props) {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Service Types */}
+              <Card className="shadow-neumorphic">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-cyan-900 mb-3">Services Offered</h3>
+                  <div className="space-y-2">
+                    {practitioner.serviceTypes.map((serviceType) => (
+                      <div
+                        key={serviceType}
+                        className="flex items-center gap-2 p-2 bg-indigo-50 rounded-lg"
+                      >
+                        <span className="text-lg">{SERVICE_TYPE_CONFIG[serviceType].emoji}</span>
+                        <span className="text-indigo-700 font-medium">
+                          {SERVICE_TYPE_CONFIG[serviceType].label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Coverage */}
+              {practitioner.coverage.length > 0 && (
+                <Card className="shadow-neumorphic border-green-200">
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold text-cyan-900 mb-3 flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-green-600" />
+                      Coverage Accepted
+                    </h3>
+                    <div className="space-y-2">
+                      {practitioner.coverage.map((coverage) => (
+                        <div
+                          key={coverage}
+                          className={cn(
+                            'flex items-center gap-2 p-2 rounded-lg border',
+                            COVERAGE_CONFIG[coverage].color
+                          )}
+                        >
+                          <span className="text-lg">{COVERAGE_CONFIG[coverage].emoji}</span>
+                          <span className="font-medium">
+                            {COVERAGE_CONFIG[coverage].label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Modalities */}
               <Card className="shadow-neumorphic">
                 <CardContent className="p-6">

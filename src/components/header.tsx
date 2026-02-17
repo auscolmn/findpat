@@ -64,6 +64,12 @@ export function Header() {
               Find Practitioners
             </Link>
             <Link 
+              href="/clinics" 
+              className="text-sm font-medium text-cyan-700 hover:text-cyan-900 transition-colors"
+            >
+              Find Clinics
+            </Link>
+            <Link 
               href="/search?userType=practitioner" 
               className="text-sm font-medium text-cyan-700 hover:text-cyan-900 transition-colors"
             >
@@ -128,6 +134,13 @@ export function Header() {
                   onClick={() => setOpen(false)}
                 >
                   Find Practitioners
+                </Link>
+                <Link 
+                  href="/clinics" 
+                  className="text-lg font-medium text-cyan-900 py-2"
+                  onClick={() => setOpen(false)}
+                >
+                  Find Clinics
                 </Link>
                 <Link 
                   href="/search?userType=practitioner" 

@@ -5,7 +5,9 @@ export type VerificationStatus = 'pending' | 'under_review' | 'approved' | 'reje
 export type VerificationMethod = 'ahpra' | 'resume' | 'linkedin' | 'professional_email' | 'manual';
 export type AvailabilityStatusDB = 'accepting' | 'waitlist' | 'not_accepting';
 export type PractitionerRoleDB = 'psychiatrist' | 'psychologist' | 'therapist' | 'nurse' | 'integration_coach';
-export type OnboardingStatus = 'not_started' | 'basic_info' | 'professional' | 'training' | 'specialties' | 'bio' | 'complete';
+export type ServiceTypeDB = 'dosing' | 'integration';
+export type CoverageTypeDB = 'medicare' | 'dva' | 'phi';
+export type OnboardingStatus = 'not_started' | 'basic_info' | 'professional' | 'services' | 'training' | 'specialties' | 'bio' | 'complete';
 
 export interface Profile {
   id: string;
@@ -27,6 +29,10 @@ export interface Profile {
   workplace_website: string | null;
   ahpra_number: string | null;
   years_experience: number | null;
+  
+  // Services & Coverage
+  service_types: ServiceTypeDB[];
+  coverage: CoverageTypeDB[];
   
   // Specialties & Modalities
   modalities: string[];

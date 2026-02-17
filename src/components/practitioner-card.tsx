@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { VerificationBadge, getCardBorderClass } from '@/components/verification-badge';
-import { Practitioner, MODALITY_LABELS, SPECIALTY_LABELS, ROLE_LABELS } from '@/types';
+import { Practitioner, MODALITY_LABELS, SPECIALTY_LABELS, ROLE_LABELS, SERVICE_TYPE_CONFIG, COVERAGE_CONFIG } from '@/types';
 import { MapPin, CheckCircle, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -95,8 +95,30 @@ export function PractitionerCard({ practitioner, showCollaborationBadge = false 
           {practitioner.bio}
         </p>
 
-        {/* Tags */}
+        {/* Service Types & Coverage */}
         <div className="flex flex-wrap gap-1.5 mt-3">
+          {practitioner.serviceTypes.map((serviceType) => (
+            <Badge
+              key={serviceType}
+              variant="secondary"
+              className="bg-indigo-50 text-indigo-700 text-xs"
+            >
+              {SERVICE_TYPE_CONFIG[serviceType].emoji} {SERVICE_TYPE_CONFIG[serviceType].label}
+            </Badge>
+          ))}
+          {practitioner.coverage.map((coverage) => (
+            <Badge
+              key={coverage}
+              variant="outline"
+              className={cn('text-xs', COVERAGE_CONFIG[coverage].color)}
+            >
+              {COVERAGE_CONFIG[coverage].emoji} {COVERAGE_CONFIG[coverage].label}
+            </Badge>
+          ))}
+        </div>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1.5 mt-2">
           {practitioner.modalities.slice(0, 3).map((modality) => (
             <Badge
               key={modality}

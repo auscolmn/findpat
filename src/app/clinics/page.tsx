@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useMemo } from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { PractitionerCard } from '@/components/practitioner-card';
+import { ClinicCard } from '@/components/clinic-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,73 +16,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { samplePractitioners, searchPractitioners } from '@/data/practitioners';
+import { sampleClinics, searchClinics, AUSTRALIAN_STATES } from '@/data/clinics';
 import {
   Modality,
-  Specialty,
-  PractitionerRole,
   VerificationTier,
-  ServiceType,
-  CoverageType,
   MODALITY_LABELS,
-  SPECIALTY_LABELS,
-  ROLE_LABELS,
   TIER_LABELS,
-  SERVICE_TYPE_CONFIG,
-  COVERAGE_CONFIG,
+  TreatmentType,
+  InsuranceAccepted,
+  TREATMENT_TYPE_LABELS,
+  INSURANCE_LABELS,
 } from '@/types';
-import { Search, Filter, X, Users, Heart } from 'lucide-react';
+import { Search, Filter, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Suspense } from 'react';
 
-function SearchContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  // User type (client or practitioner)
-  const [userType, setUserType] = useState<'client' | 'practitioner'>(
-    (searchParams.get('userType') as 'client' | 'practitioner') || 'client'
-  );
-
+export default function ClinicsPage() {
   // Filters
-  const [location, setLocation] = useState(searchParams.get('location') || '');
+  const [location, setLocation] = useState('');
+  const [selectedState, setSelectedState] = useState<string>('');
   const [selectedModalities, setSelectedModalities] = useState<Modality[]>([]);
-  const [selectedSpecialties, setSelectedSpecialties] = useState<Specialty[]>([]);
-  const [selectedRoles, setSelectedRoles] = useState<PractitionerRole[]>([]);
+  const [selectedTreatmentTypes, setSelectedTreatmentTypes] = useState<TreatmentType[]>([]);
+  const [selectedInsurance, setSelectedInsurance] = useState<InsuranceAccepted[]>([]);
   const [selectedTiers, setSelectedTiers] = useState<VerificationTier[]>([]);
-  const [selectedServiceTypes, setSelectedServiceTypes] = useState<ServiceType[]>([]);
-  const [selectedCoverage, setSelectedCoverage] = useState<CoverageType[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Update URL when userType changes
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('userType', userType);
-    router.replace(`/search?${params.toString()}`, { scroll: false });
-  }, [userType, searchParams, router]);
-
-  // Filter practitioners
-  const filteredPractitioners = useMemo(() => {
-    return searchPractitioners(samplePractitioners, {
-      userType,
+  // Filter clinics
+  const filteredClinics = useMemo(() => {
+    return searchClinics(sampleClinics, {
       location,
+      state: selectedState || undefined,
       modalities: selectedModalities,
-      specialties: selectedSpecialties,
-      roles: selectedRoles,
+      treatmentTypes: selectedTreatmentTypes,
+      insuranceAccepted: selectedInsurance,
       verificationTiers: selectedTiers,
-      serviceTypes: selectedServiceTypes,
-      coverage: selectedCoverage,
-      lookingToCollaborate: userType === 'practitioner',
     });
   }, [
-    userType,
     location,
+    selectedState,
     selectedModalities,
-    selectedSpecialties,
-    selectedRoles,
+    selectedTreatmentTypes,
+    selectedInsurance,
     selectedTiers,
-    selectedServiceTypes,
-    selectedCoverage,
   ]);
 
   const toggleModality = (modality: Modality) => {
@@ -94,17 +67,19 @@ function SearchContent() {
     );
   };
 
-  const toggleSpecialty = (specialty: Specialty) => {
-    setSelectedSpecialties((prev) =>
-      prev.includes(specialty)
-        ? prev.filter((s) => s !== specialty)
-        : [...prev, specialty]
+  const toggleTreatmentType = (type: TreatmentType) => {
+    setSelectedTreatmentTypes((prev) =>
+      prev.includes(type)
+        ? prev.filter((t) => t !== type)
+        : [...prev, type]
     );
   };
 
-  const toggleRole = (role: PractitionerRole) => {
-    setSelectedRoles((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
+  const toggleInsurance = (insurance: InsuranceAccepted) => {
+    setSelectedInsurance((prev) =>
+      prev.includes(insurance)
+        ? prev.filter((i) => i !== insurance)
+        : [...prev, insurance]
     );
   };
 
@@ -114,92 +89,37 @@ function SearchContent() {
     );
   };
 
-  const toggleServiceType = (serviceType: ServiceType) => {
-    setSelectedServiceTypes((prev) =>
-      prev.includes(serviceType)
-        ? prev.filter((s) => s !== serviceType)
-        : [...prev, serviceType]
-    );
-  };
-
-  const toggleCoverage = (coverage: CoverageType) => {
-    setSelectedCoverage((prev) =>
-      prev.includes(coverage)
-        ? prev.filter((c) => c !== coverage)
-        : [...prev, coverage]
-    );
-  };
-
   const clearFilters = () => {
     setLocation('');
+    setSelectedState('');
     setSelectedModalities([]);
-    setSelectedSpecialties([]);
-    setSelectedRoles([]);
+    setSelectedTreatmentTypes([]);
+    setSelectedInsurance([]);
     setSelectedTiers([]);
-    setSelectedServiceTypes([]);
-    setSelectedCoverage([]);
   };
 
   const hasActiveFilters =
     location ||
+    selectedState ||
     selectedModalities.length > 0 ||
-    selectedSpecialties.length > 0 ||
-    selectedRoles.length > 0 ||
-    selectedTiers.length > 0 ||
-    selectedServiceTypes.length > 0 ||
-    selectedCoverage.length > 0;
+    selectedTreatmentTypes.length > 0 ||
+    selectedInsurance.length > 0 ||
+    selectedTiers.length > 0;
 
   return (
     <div className="min-h-screen flex flex-col bg-cyan-50/50">
       <Header />
 
       <main className="flex-1">
-        {/* User Type Selector */}
-        <section className="bg-white border-b border-cyan-200 sticky top-16 z-40">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-center gap-2">
-              <Button
-                variant={userType === 'client' ? 'default' : 'outline'}
-                onClick={() => setUserType('client')}
-                className={cn(
-                  'gap-2',
-                  userType === 'client'
-                    ? 'bg-green-600 hover:bg-green-700'
-                    : 'border-cyan-300 text-cyan-700'
-                )}
-              >
-                <Heart className="h-4 w-4" />
-                Seeking Treatment
-              </Button>
-              <Button
-                variant={userType === 'practitioner' ? 'default' : 'outline'}
-                onClick={() => setUserType('practitioner')}
-                className={cn(
-                  'gap-2',
-                  userType === 'practitioner'
-                    ? 'bg-cyan-600 hover:bg-cyan-700'
-                    : 'border-cyan-300 text-cyan-700'
-                )}
-              >
-                <Users className="h-4 w-4" />
-                Finding Collaborators
-              </Button>
-            </div>
-          </div>
-        </section>
-
         <div className="container mx-auto px-4 py-6">
           {/* Search Header */}
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-cyan-900 mb-2">
-              {userType === 'client'
-                ? 'Find a PAT Practitioner'
-                : 'Find Collaborators'}
+            <h1 className="text-2xl font-bold text-cyan-900 mb-2 flex items-center gap-2">
+              <Building2 className="h-7 w-7 text-teal-600" />
+              Find a PAT Clinic
             </h1>
             <p className="text-cyan-600">
-              {userType === 'client'
-                ? 'Search verified practitioners by location, specialty, and modality'
-                : 'Connect with practitioners looking to collaborate on patient care'}
+              Discover treatment facilities offering psychedelic-assisted therapy across Australia
             </p>
           </div>
 
@@ -211,7 +131,7 @@ function SearchContent() {
                 showFilters ? 'block' : 'hidden lg:block'
               )}
             >
-              <Card className="shadow-neumorphic sticky top-40">
+              <Card className="shadow-neumorphic sticky top-24">
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="font-semibold text-cyan-900">Filters</h2>
@@ -236,7 +156,7 @@ function SearchContent() {
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-cyan-400" />
                       <Input
                         type="text"
-                        placeholder="City or state..."
+                        placeholder="City or postcode..."
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                         className="pl-10 bg-white border-cyan-200"
@@ -244,66 +164,24 @@ function SearchContent() {
                     </div>
                   </div>
 
-                  {/* Service Type */}
+                  {/* State */}
                   <div className="mb-5">
                     <Label className="text-sm font-medium text-cyan-800 mb-2 block">
-                      Service Type
+                      State
                     </Label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {(Object.keys(SERVICE_TYPE_CONFIG) as ServiceType[]).map(
-                        (serviceType) => (
-                          <Badge
-                            key={serviceType}
-                            variant={
-                              selectedServiceTypes.includes(serviceType)
-                                ? 'default'
-                                : 'outline'
-                            }
-                            className={cn(
-                              'cursor-pointer transition-colors',
-                              selectedServiceTypes.includes(serviceType)
-                                ? 'bg-cyan-600 hover:bg-cyan-700'
-                                : 'border-cyan-300 text-cyan-700 hover:bg-cyan-50'
-                            )}
-                            onClick={() => toggleServiceType(serviceType)}
-                          >
-                            {SERVICE_TYPE_CONFIG[serviceType].emoji}{' '}
-                            {SERVICE_TYPE_CONFIG[serviceType].label}
-                          </Badge>
-                        )
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Coverage */}
-                  <div className="mb-5">
-                    <Label className="text-sm font-medium text-cyan-800 mb-2 block">
-                      Coverage Accepted
-                    </Label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {(Object.keys(COVERAGE_CONFIG) as CoverageType[]).map(
-                        (coverage) => (
-                          <Badge
-                            key={coverage}
-                            variant={
-                              selectedCoverage.includes(coverage)
-                                ? 'default'
-                                : 'outline'
-                            }
-                            className={cn(
-                              'cursor-pointer transition-colors',
-                              selectedCoverage.includes(coverage)
-                                ? COVERAGE_CONFIG[coverage].color
-                                : 'border-cyan-300 text-cyan-700 hover:bg-cyan-50'
-                            )}
-                            onClick={() => toggleCoverage(coverage)}
-                          >
-                            {COVERAGE_CONFIG[coverage].emoji}{' '}
-                            {COVERAGE_CONFIG[coverage].label}
-                          </Badge>
-                        )
-                      )}
-                    </div>
+                    <Select value={selectedState} onValueChange={setSelectedState}>
+                      <SelectTrigger className="bg-white border-cyan-200">
+                        <SelectValue placeholder="All states" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All states</SelectItem>
+                        {AUSTRALIAN_STATES.map((state) => (
+                          <SelectItem key={state.value} value={state.value}>
+                            {state.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Modalities */}
@@ -325,7 +203,7 @@ function SearchContent() {
                             className={cn(
                               'cursor-pointer transition-colors',
                               selectedModalities.includes(modality)
-                                ? 'bg-cyan-600 hover:bg-cyan-700'
+                                ? 'bg-teal-600 hover:bg-teal-700'
                                 : 'border-cyan-300 text-cyan-700 hover:bg-cyan-50'
                             )}
                             onClick={() => toggleModality(modality)}
@@ -336,58 +214,60 @@ function SearchContent() {
                     </div>
                   </div>
 
-                  {/* Specialties */}
+                  {/* Treatment Types */}
                   <div className="mb-5">
                     <Label className="text-sm font-medium text-cyan-800 mb-2 block">
-                      Specialty
+                      Treatment Type
                     </Label>
                     <div className="flex flex-wrap gap-1.5">
-                      {(Object.keys(SPECIALTY_LABELS) as Specialty[])
-                        .slice(0, 6)
-                        .map((specialty) => (
+                      {(Object.keys(TREATMENT_TYPE_LABELS) as TreatmentType[]).map(
+                        (type) => (
                           <Badge
-                            key={specialty}
+                            key={type}
                             variant={
-                              selectedSpecialties.includes(specialty)
+                              selectedTreatmentTypes.includes(type)
                                 ? 'default'
                                 : 'outline'
                             }
                             className={cn(
                               'cursor-pointer transition-colors text-xs',
-                              selectedSpecialties.includes(specialty)
-                                ? 'bg-cyan-600 hover:bg-cyan-700'
+                              selectedTreatmentTypes.includes(type)
+                                ? 'bg-teal-600 hover:bg-teal-700'
                                 : 'border-cyan-300 text-cyan-700 hover:bg-cyan-50'
                             )}
-                            onClick={() => toggleSpecialty(specialty)}
+                            onClick={() => toggleTreatmentType(type)}
                           >
-                            {SPECIALTY_LABELS[specialty]}
+                            {TREATMENT_TYPE_LABELS[type]}
                           </Badge>
-                        ))}
+                        )
+                      )}
                     </div>
                   </div>
 
-                  {/* Role */}
+                  {/* Insurance */}
                   <div className="mb-5">
                     <Label className="text-sm font-medium text-cyan-800 mb-2 block">
-                      Role
+                      Insurance Accepted
                     </Label>
                     <div className="flex flex-wrap gap-1.5">
-                      {(Object.keys(ROLE_LABELS) as PractitionerRole[]).map(
-                        (role) => (
+                      {(Object.keys(INSURANCE_LABELS) as InsuranceAccepted[]).map(
+                        (insurance) => (
                           <Badge
-                            key={role}
+                            key={insurance}
                             variant={
-                              selectedRoles.includes(role) ? 'default' : 'outline'
+                              selectedInsurance.includes(insurance)
+                                ? 'default'
+                                : 'outline'
                             }
                             className={cn(
                               'cursor-pointer transition-colors text-xs',
-                              selectedRoles.includes(role)
-                                ? 'bg-cyan-600 hover:bg-cyan-700'
+                              selectedInsurance.includes(insurance)
+                                ? 'bg-green-600 hover:bg-green-700'
                                 : 'border-cyan-300 text-cyan-700 hover:bg-cyan-50'
                             )}
-                            onClick={() => toggleRole(role)}
+                            onClick={() => toggleInsurance(insurance)}
                           >
-                            {ROLE_LABELS[role]}
+                            {INSURANCE_LABELS[insurance]}
                           </Badge>
                         )
                       )}
@@ -441,14 +321,13 @@ function SearchContent() {
                   <Filter className="h-4 w-4 mr-2" />
                   {showFilters ? 'Hide Filters' : 'Show Filters'}
                   {hasActiveFilters && (
-                    <Badge className="ml-2 bg-cyan-600">
+                    <Badge className="ml-2 bg-teal-600">
                       {selectedModalities.length +
-                        selectedSpecialties.length +
-                        selectedRoles.length +
+                        selectedTreatmentTypes.length +
+                        selectedInsurance.length +
                         selectedTiers.length +
-                        selectedServiceTypes.length +
-                        selectedCoverage.length +
-                        (location ? 1 : 0)}
+                        (location ? 1 : 0) +
+                        (selectedState ? 1 : 0)}
                     </Badge>
                   )}
                 </Button>
@@ -458,29 +337,28 @@ function SearchContent() {
               <div className="flex items-center justify-between mb-4">
                 <p className="text-cyan-700">
                   <span className="font-semibold">
-                    {filteredPractitioners.length}
+                    {filteredClinics.length}
                   </span>{' '}
-                  practitioner{filteredPractitioners.length !== 1 ? 's' : ''} found
+                  clinic{filteredClinics.length !== 1 ? 's' : ''} found
                 </p>
               </div>
 
               {/* Results Grid */}
-              {filteredPractitioners.length > 0 ? (
+              {filteredClinics.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-5">
-                  {filteredPractitioners.map((practitioner) => (
-                    <PractitionerCard
-                      key={practitioner.id}
-                      practitioner={practitioner}
-                      showCollaborationBadge={userType === 'practitioner'}
+                  {filteredClinics.map((clinic) => (
+                    <ClinicCard
+                      key={clinic.id}
+                      clinic={clinic}
                     />
                   ))}
                 </div>
               ) : (
                 <Card className="shadow-neumorphic">
                   <CardContent className="p-12 text-center">
-                    <Search className="h-12 w-12 text-cyan-300 mx-auto mb-4" />
+                    <Building2 className="h-12 w-12 text-cyan-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-cyan-900 mb-2">
-                      No practitioners found
+                      No clinics found
                     </h3>
                     <p className="text-cyan-600 mb-4">
                       Try adjusting your filters or search in a different location
@@ -502,19 +380,5 @@ function SearchContent() {
 
       <Footer />
     </div>
-  );
-}
-
-export default function SearchPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
-        </div>
-      }
-    >
-      <SearchContent />
-    </Suspense>
   );
 }

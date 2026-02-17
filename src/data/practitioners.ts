@@ -19,6 +19,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'accepting',
     modalities: ['mdma', 'psilocybin', 'ketamine'],
     specialties: ['trauma', 'ptsd', 'depression'],
+    serviceTypes: ['dosing', 'integration'],
+    coverage: ['medicare', 'phi'],
     lookingToCollaborate: true,
     collaborationRoles: ['psychologist', 'therapist'],
     website: 'https://drsarahmartinez.com',
@@ -61,6 +63,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'waitlist',
     modalities: ['ketamine'],
     specialties: ['depression', 'anxiety', 'spiritual'],
+    serviceTypes: ['integration'],
+    coverage: ['phi'],
     lookingToCollaborate: true,
     collaborationRoles: ['psychiatrist'],
     website: 'https://michaelchentherapy.com',
@@ -101,6 +105,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'accepting',
     modalities: ['psilocybin'],
     specialties: ['end_of_life', 'anxiety', 'depression'],
+    serviceTypes: ['dosing', 'integration'],
+    coverage: ['medicare', 'dva', 'phi'],
     lookingToCollaborate: false,
     website: 'https://drelena.co',
     bookingUrl: 'https://drelena.co/book',
@@ -141,6 +147,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'accepting',
     modalities: ['mdma'],
     specialties: ['trauma', 'ptsd'],
+    serviceTypes: ['dosing'],
+    coverage: ['dva'],
     lookingToCollaborate: true,
     collaborationRoles: ['psychiatrist', 'nurse'],
     website: 'https://jameswilsontherapy.com',
@@ -174,6 +182,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'accepting',
     modalities: ['ketamine', 'psilocybin'],
     specialties: ['depression', 'anxiety', 'chronic_pain'],
+    serviceTypes: ['dosing', 'integration'],
+    coverage: ['medicare', 'phi'],
     lookingToCollaborate: true,
     collaborationRoles: ['psychologist', 'therapist', 'integration_coach'],
     website: 'https://drpatelpsych.com',
@@ -215,6 +225,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'accepting',
     modalities: ['psilocybin', 'ayahuasca', 'mdma'],
     specialties: ['spiritual', 'trauma', 'anxiety'],
+    serviceTypes: ['integration'],
+    coverage: [],
     lookingToCollaborate: true,
     collaborationRoles: ['psychiatrist', 'psychologist'],
     website: 'https://lisanintegration.com',
@@ -247,6 +259,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'waitlist',
     modalities: ['ibogaine', 'ayahuasca', 'ketamine'],
     specialties: ['addiction'],
+    serviceTypes: ['dosing'],
+    coverage: ['medicare', 'dva'],
     lookingToCollaborate: false,
     website: 'https://drkimaddiction.com',
     languages: ['English', 'Korean'],
@@ -285,6 +299,8 @@ export const samplePractitioners: Practitioner[] = [
     availability: 'accepting',
     modalities: ['ketamine'],
     specialties: ['depression', 'anxiety', 'trauma'],
+    serviceTypes: ['dosing', 'integration'],
+    coverage: ['phi'],
     lookingToCollaborate: true,
     collaborationRoles: ['therapist', 'integration_coach'],
     website: 'https://amandabrooksnp.com',
@@ -318,6 +334,8 @@ export function searchPractitioners(
     specialties?: string[];
     roles?: string[];
     verificationTiers?: string[];
+    serviceTypes?: string[];
+    coverage?: string[];
     lookingToCollaborate?: boolean;
   }
 ): Practitioner[] {
@@ -354,6 +372,20 @@ export function searchPractitioners(
     // Verification tier filter
     if (filters.verificationTiers && filters.verificationTiers.length > 0) {
       if (!filters.verificationTiers.includes(p.verificationTier)) {
+        return false;
+      }
+    }
+
+    // Service types filter
+    if (filters.serviceTypes && filters.serviceTypes.length > 0) {
+      if (!filters.serviceTypes.some((s) => p.serviceTypes.includes(s as any))) {
+        return false;
+      }
+    }
+
+    // Coverage filter
+    if (filters.coverage && filters.coverage.length > 0) {
+      if (!filters.coverage.some((c) => p.coverage.includes(c as any))) {
         return false;
       }
     }

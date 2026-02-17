@@ -23,6 +23,7 @@ import {
 import { WelcomeStep } from '@/components/onboarding/welcome-step';
 import { BasicInfoStep } from '@/components/onboarding/basic-info-step';
 import { ProfessionalStep } from '@/components/onboarding/professional-step';
+import { ServicesStep } from '@/components/onboarding/services-step';
 import { TrainingStep } from '@/components/onboarding/training-step';
 import { SpecialtiesStep } from '@/components/onboarding/specialties-step';
 import { BioStep } from '@/components/onboarding/bio-step';
@@ -31,6 +32,7 @@ const STEPS = [
   { id: 'welcome', label: 'Welcome', icon: CheckCircle, status: 'not_started' as OnboardingStatus },
   { id: 'basic_info', label: 'Basic Info', icon: User, status: 'basic_info' as OnboardingStatus },
   { id: 'professional', label: 'Professional', icon: Briefcase, status: 'professional' as OnboardingStatus },
+  { id: 'services', label: 'Services', icon: Heart, status: 'services' as OnboardingStatus },
   { id: 'training', label: 'Training', icon: GraduationCap, status: 'training' as OnboardingStatus },
   { id: 'specialties', label: 'Specialties', icon: Heart, status: 'specialties' as OnboardingStatus },
   { id: 'bio', label: 'Bio & Contact', icon: FileText, status: 'bio' as OnboardingStatus },
@@ -162,11 +164,19 @@ export default function OnboardingPage() {
         return (
           <ProfessionalStep 
             profile={profile} 
-            onSave={(data) => saveProgress(data, 'training')}
+            onSave={(data) => saveProgress(data, 'services')}
             isSaving={isSaving}
           />
         );
       case 3:
+        return (
+          <ServicesStep 
+            profile={profile} 
+            onSave={(data) => saveProgress(data, 'training')}
+            isSaving={isSaving}
+          />
+        );
+      case 4:
         return (
           <TrainingStep 
             profile={profile} 
@@ -174,7 +184,7 @@ export default function OnboardingPage() {
             isSaving={isSaving}
           />
         );
-      case 4:
+      case 5:
         return (
           <SpecialtiesStep 
             profile={profile} 
@@ -182,7 +192,7 @@ export default function OnboardingPage() {
             isSaving={isSaving}
           />
         );
-      case 5:
+      case 6:
         return (
           <BioStep 
             profile={profile} 

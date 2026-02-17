@@ -80,6 +80,19 @@ export function PractitionerCard({ practitioner, showCollaborationBadge = false 
               <span>{practitioner.location.city}, {practitioner.location.state}</span>
             </div>
 
+            {/* Clinic affiliation */}
+            {practitioner.clinicName && (
+              <div className="flex items-center gap-1 text-sm text-teal-600 mb-2">
+                <span>Works at </span>
+                <Link 
+                  href={`/clinic/${practitioner.clinicSlug}`}
+                  className="font-medium hover:underline"
+                >
+                  {practitioner.clinicName}
+                </Link>
+              </div>
+            )}
+
             {/* Collaboration badge */}
             {showCollaborationBadge && practitioner.lookingToCollaborate && (
               <div className="flex items-center gap-1 text-sm text-purple-600 mb-2">

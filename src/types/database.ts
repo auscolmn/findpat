@@ -60,6 +60,10 @@ export interface Profile {
   // Analytics
   profile_views: number;
   
+  // Clinic affiliation
+  clinic_id: string | null;
+  clinic_role: string | null;
+  
   // Timestamps
   created_at: string;
   updated_at: string;

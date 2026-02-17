@@ -1,0 +1,208 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* FindPAT Design System - Custom Colors */
+@theme inline {
+  /* Primary - Calm Cyan */
+  --color-cyan-50: #ECFEFF;
+  --color-cyan-100: #CFFAFE;
+  --color-cyan-200: #A5F3FC;
+  --color-cyan-300: #67E8F9;
+  --color-cyan-400: #22D3EE;
+  --color-cyan-500: #06B6D4;
+  --color-cyan-600: #0891B2;
+  --color-cyan-700: #0E7490;
+  --color-cyan-800: #155E75;
+  --color-cyan-900: #164E63;
+  
+  /* CTA - Health Green */
+  --color-green-50: #ECFDF5;
+  --color-green-100: #D1FAE5;
+  --color-green-200: #A7F3D0;
+  --color-green-300: #6EE7B7;
+  --color-green-400: #34D399;
+  --color-green-500: #10B981;
+  --color-green-600: #059669;
+  --color-green-700: #047857;
+  --color-green-800: #065F46;
+  --color-green-900: #064E3B;
+  
+  /* Accent - Verification Gold */
+  --color-gold-50: #FFFBEB;
+  --color-gold-100: #FEF3C7;
+  --color-gold-200: #FDE68A;
+  --color-gold-300: #FCD34D;
+  --color-gold-400: #FBBF24;
+  --color-gold-500: #FFD700;
+  --color-gold-600: #D97706;
+  --color-gold-700: #B45309;
+  --color-gold-800: #92400E;
+  --color-gold-900: #78350F;
+
+  /* Custom shadows for neumorphism */
+  --shadow-card: 0 4px 24px rgba(13, 116, 144, 0.06), 0 1px 3px rgba(13, 116, 144, 0.04);
+  --shadow-raised: 8px 8px 16px rgba(13, 116, 144, 0.08), -8px -8px 16px rgba(255, 255, 255, 0.9);
+  --shadow-inset: inset 4px 4px 8px rgba(13, 116, 144, 0.08), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+  --shadow-gold-glow: 0 2px 8px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  --shadow-green-glow: 0 2px 8px rgba(5, 150, 105, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --shadow-cyan-glow: 0 2px 8px rgba(34, 211, 238, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  /* Typography */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  
+  /* Standard theme variables */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* FindPAT Theme - Light Mode */
+  --background: #ECFEFF;
+  --foreground: #164E63;
+  --card: #FFFFFF;
+  --card-foreground: #164E63;
+  --popover: #FFFFFF;
+  --popover-foreground: #164E63;
+  --primary: #0891B2;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F0FDFA;
+  --secondary-foreground: #164E63;
+  --muted: #F0FDFA;
+  --muted-foreground: #0E7490;
+  --accent: #059669;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --border: #A5F3FC;
+  --input: #FFFFFF;
+  --ring: #059669;
+  --chart-1: #0891B2;
+  --chart-2: #059669;
+  --chart-3: #FFD700;
+  --chart-4: #22D3EE;
+  --chart-5: #0E7490;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #164E63;
+  --sidebar-primary: #0891B2;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F0FDFA;
+  --sidebar-accent-foreground: #164E63;
+  --sidebar-border: #A5F3FC;
+  --sidebar-ring: #059669;
+}
+
+.dark {
+  --background: #0F172A;
+  --foreground: #E2E8F0;
+  --card: #1E293B;
+  --card-foreground: #E2E8F0;
+  --popover: #1E293B;
+  --popover-foreground: #E2E8F0;
+  --primary: #22D3EE;
+  --primary-foreground: #164E63;
+  --secondary: #334155;
+  --secondary-foreground: #E2E8F0;
+  --muted: #334155;
+  --muted-foreground: #94A3B8;
+  --accent: #34D399;
+  --accent-foreground: #064E3B;
+  --destructive: #EF4444;
+  --border: #334155;
+  --input: #334155;
+  --ring: #34D399;
+  --chart-1: #22D3EE;
+  --chart-2: #34D399;
+  --chart-3: #FFD700;
+  --chart-4: #67E8F9;
+  --chart-5: #06B6D4;
+  --sidebar: #1E293B;
+  --sidebar-foreground: #E2E8F0;
+  --sidebar-primary: #22D3EE;
+  --sidebar-primary-foreground: #164E63;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #E2E8F0;
+  --sidebar-border: #334155;
+  --sidebar-ring: #34D399;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  /* Neumorphic utilities */
+  .shadow-neumorphic {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-raised {
+    box-shadow: var(--shadow-raised);
+  }
+  .shadow-inset {
+    box-shadow: var(--shadow-inset);
+  }
+  .shadow-gold-glow {
+    box-shadow: var(--shadow-gold-glow);
+  }
+  .shadow-green-glow {
+    box-shadow: var(--shadow-green-glow);
+  }
+  .shadow-cyan-glow {
+    box-shadow: var(--shadow-cyan-glow);
+  }
+  
+  /* Gradient utilities */
+  .bg-gradient-gold {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  }
+  .bg-gradient-cyan {
+    background: linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%);
+  }
+  .bg-gradient-green {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+  }
+}
